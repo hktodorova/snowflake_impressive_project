@@ -2,7 +2,6 @@ name: ecommerce_rt
 version: '1.0.0'
 config-version: 2
 profile: ecommerce_rt
-author: 'Hristina Todorova <hktodorova@gmail.com>'
 
 model-paths: ['models']
 seed-paths: ['seeds']

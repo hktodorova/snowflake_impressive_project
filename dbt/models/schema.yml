@@ -12,7 +12,8 @@ models:
         tests:
           - not_null
           - dbt_utils.expression_is_true:
-              expression: ">= 0"
+              arguments:
+                expression: ">= 0"
   - name: silver_clickstream_events
     description: Clickstream events cleaned and deduped. Anonymised sessions are kept — customer_id is null for guests.
     columns:

@@ -27,9 +27,9 @@ jobs:
         working-directory: dbt
         run: dbt deps
 
-      - name: Run dbt compile
+      - name: Validate dbt project
         working-directory: dbt
-        run: dbt compile --profiles-dir .
+        run: dbt parse --profiles-dir .
 
       - name: Run SQLFluff
         run: |

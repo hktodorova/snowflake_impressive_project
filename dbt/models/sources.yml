@@ -4,17 +4,23 @@ sources:
   - name: raw
     database: ECOMMERCE_RT
     schema: RAW
-    freshness:
-      warn_after: {count: 30, period: minute}
-      error_after: {count: 120, period: minute}
+    config:
+      freshness:
+        warn_after: {count: 30, period: minute}
+        error_after: {count: 120, period: minute}
     tables:
       - name: RAW_ORDERS
-        loaded_at_field: ingested_at
+        config:
+          loaded_at_field: ingested_at
       - name: RAW_CLICKSTREAM
-        loaded_at_field: ingested_at
+        config:
+          loaded_at_field: ingested_at
       - name: RAW_CUSTOMERS_CDC
-        loaded_at_field: ingested_at
+        config:
+          loaded_at_field: ingested_at
       - name: RAW_PAYMENTS
-        loaded_at_field: ingested_at
+        config:
+          loaded_at_field: ingested_at
       - name: RAW_PARTNER_PRODUCTS
-        loaded_at_field: ingested_at
+        config:
+          loaded_at_field: ingested_at
