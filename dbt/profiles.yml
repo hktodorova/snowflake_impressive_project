@@ -12,3 +12,18 @@ snowflake_ecommerce:
       schema: "{{ env_var('SNOWFLAKE_SCHEMA', 'DBT_CI') }}"
       threads: 4
       client_session_keep_alive: false
+
+ecommerce_rt:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT', 'dummy') }}"
+      user: "{{ env_var('SNOWFLAKE_USER', 'dummy') }}"
+      password: "{{ env_var('SNOWFLAKE_PASSWORD', 'dummy') }}"
+      role: "{{ env_var('SNOWFLAKE_ROLE', 'SYSADMIN') }}"
+      database: "{{ env_var('SNOWFLAKE_DATABASE', 'ECOMMERCE_ANALYTICS') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'WH_TRANSFORM_XS') }}"
+      schema: "{{ env_var('SNOWFLAKE_SCHEMA', 'DBT_DEV') }}"
+      threads: 4
+      client_session_keep_alive: false      

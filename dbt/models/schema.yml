@@ -3,41 +3,89 @@ version: 2
 models:
   - name: silver_orders
     description: Orders after dedup and type casting. One row per order_id, latest version wins.
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          arguments:
+            min_value: 1
     columns:
       - name: order_id
-        tests: [not_null, unique]
+        tests:
+          - not_null
+          - unique
       - name: customer_id
-        tests: [not_null]
+        tests:
+          - not_null
       - name: total_amount
         tests:
           - not_null
           - dbt_utils.expression_is_true:
               arguments:
                 expression: ">= 0"
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0
+                strictly: false
+
   - name: silver_clickstream_events
     description: Clickstream events cleaned and deduped. Anonymised sessions are kept — customer_id is null for guests.
     columns:
       - name: event_id
-        tests: [not_null, unique]
+        tests:
+          - not_null
+          - unique
+      - name: event_timestamp
+        tests:
+          - not_null
+
   - name: silver_customers_current
     description: Latest customer record from the CDC feed. One row per customer, op=d rows are excluded.
     columns:
       - name: customer_id
-        tests: [not_null, unique]
+        tests:
+          - not_null
+          - unique
       - name: email
-        tests: [not_null]
+        tests:
+          - not_null
+
   - name: gold_customer_360
     description: Customer-level aggregation — lifetime orders, revenue, clickstream activity. Used by BI and as a base for scoring.
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          arguments:
+            min_value: 1
     columns:
       - name: customer_id
-        tests: [not_null, unique]
+        tests:
+          - not_null
+          - unique
+
   - name: gold_fraud_signals
     description: Three simple fraud flags at order grain plus a composite score. Not a final model — just signals for the risk team to act on.
     columns:
       - name: order_id
-        tests: [not_null, unique]
+        tests:
+          - not_null
+          - unique
+      - name: fraud_score
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0
+                max_value: 100
+
   - name: mart_daily_revenue
     description: Daily revenue by country, status-filtered. Primary source for the revenue dashboard.
+    columns:
+      - name: revenue_date
+        tests:
+          - not_null
+      - name: total_revenue
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0
+                strictly: false
 
 exposures:
   - name: bi_revenue_dashboard
