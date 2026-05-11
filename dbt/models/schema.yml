@@ -1,0 +1,74 @@
+version: 2
+
+models:
+  - name: silver_orders
+    description: Orders after dedup and type casting. One row per order_id, latest version wins.
+    columns:
+      - name: order_id
+        tests: [not_null, unique]
+      - name: customer_id
+        tests: [not_null]
+      - name: total_amount
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+  - name: silver_clickstream_events
+    description: Clickstream events cleaned and deduped. Anonymised sessions are kept — customer_id is null for guests.
+    columns:
+      - name: event_id
+        tests: [not_null, unique]
+  - name: silver_customers_current
+    description: Latest customer record from the CDC feed. One row per customer, op=d rows are excluded.
+    columns:
+      - name: customer_id
+        tests: [not_null, unique]
+      - name: email
+        tests: [not_null]
+  - name: gold_customer_360
+    description: Customer-level aggregation — lifetime orders, revenue, clickstream activity. Used by BI and as a base for scoring.
+    columns:
+      - name: customer_id
+        tests: [not_null, unique]
+  - name: gold_fraud_signals
+    description: Three simple fraud flags at order grain plus a composite score. Not a final model — just signals for the risk team to act on.
+    columns:
+      - name: order_id
+        tests: [not_null, unique]
+  - name: mart_daily_revenue
+    description: Daily revenue by country, status-filtered. Primary source for the revenue dashboard.
+
+exposures:
+  - name: bi_revenue_dashboard
+    type: dashboard
+    maturity: high
+    description: >
+      Daily revenue dashboard consuming mart_daily_revenue and gold_customer_360.
+    depends_on:
+      - ref('mart_daily_revenue')
+      - ref('gold_customer_360')
+    owner:
+      name: Hristina Todorova
+      email: hktodorova@gmail.com
+
+  - name: ml_churn_model
+    type: ml
+    maturity: medium
+    description: >
+      Customer churn prediction model consuming the 30-day behavior feature table.
+    depends_on:
+      - ref('feature_customer_behavior_30d')
+    owner:
+      name: Hristina Todorova
+      email: hktodorova@gmail.com
+
+  - name: fraud_ops_dashboard
+    type: dashboard
+    maturity: high
+    description: >
+      Real-time fraud monitoring dashboard consuming gold_fraud_signals.
+    depends_on:
+      - ref('gold_fraud_signals')
+    owner:
+      name: Hristina Todorova
+      email: hktodorova@gmail.com

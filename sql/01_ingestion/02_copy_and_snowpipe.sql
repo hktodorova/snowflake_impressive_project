@@ -1,0 +1,47 @@
+USE DATABASE ECOMMERCE_RT;
+
+COPY INTO RAW.RAW_ORDERS (raw_payload, source_system, source_file, source_row_number, load_id, record_hash)
+FROM (
+  SELECT
+    $1,
+    'orders_api',
+    METADATA$FILENAME,
+    METADATA$FILE_ROW_NUMBER,
+    UUID_STRING(),
+    SHA2(TO_VARCHAR($1), 256)
+  FROM @RAW.STG_ORDERS_JSON
+)
+ON_ERROR = CONTINUE;
+
+COPY INTO RAW.RAW_PARTNER_PRODUCTS (partner_id, product_sku, category, brand, list_price, source_file)
+FROM (
+  SELECT $1, $2, $3, $4, $5::NUMBER(12,2), METADATA$FILENAME
+  FROM @RAW.STG_PARTNER_CSV
+)
+ON_ERROR = CONTINUE;
+
+CREATE PIPE IF NOT EXISTS RAW.PIPE_ORDERS_AUTO_INGEST
+  AUTO_INGEST = FALSE
+AS
+COPY INTO RAW.RAW_ORDERS (raw_payload, source_system, source_file, source_row_number, load_id, record_hash)
+FROM (
+  SELECT $1, 'orders_api', METADATA$FILENAME, METADATA$FILE_ROW_NUMBER, UUID_STRING(), SHA2(TO_VARCHAR($1), 256)
+  FROM @RAW.STG_ORDERS_JSON
+)
+FILE_FORMAT = UTIL.FF_JSON
+ON_ERROR = CONTINUE;
+
+CREATE PIPE IF NOT EXISTS RAW.PIPE_CLICKSTREAM_REPLAY
+AS
+COPY INTO RAW.RAW_CLICKSTREAM (raw_payload, event_id, session_id, event_ts, record_hash)
+FROM (
+  SELECT
+    $1,
+    $1:event_id::STRING,
+    $1:session_id::STRING,
+    TRY_TO_TIMESTAMP_NTZ($1:event_ts::STRING),
+    SHA2(TO_VARCHAR($1), 256)
+  FROM @RAW.STG_CLICKSTREAM_JSON
+)
+FILE_FORMAT = UTIL.FF_JSON
+ON_ERROR = CONTINUE;
