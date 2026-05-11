@@ -12,6 +12,23 @@
 
 Production-style Snowflake analytics platform implementing real-time ingestion, medallion architecture, analytics engineering, governance, observability and infrastructure automation.
 
+## Quick Recruiter Summary
+
+This project demonstrates practical Snowflake Data Engineering skills:
+
+* SQL-based ELT pipelines
+* Snowflake Streams, Tasks and Dynamic Tables
+* dbt models, tests and snapshots
+* Snowpark Python for data quality and feature engineering
+* Terraform Infrastructure as Code
+* GitHub Actions CI/CD
+* Governance with RBAC, masking and row access policies
+* Kafka / Snowpipe Streaming ingestion example
+
+Best fit: Snowflake Data Engineer, Analytics Engineer, Data Platform Engineer.
+
+---
+
 This is my personal portfolio project — a full data platform built on Snowflake for an e-commerce use case. I built it to demonstrate how I would approach a production-style setup end-to-end, not just the transformation layer.
 
 The implementation intentionally prioritizes production-oriented patterns over minimal examples. The stack includes ingestion (batch + streaming), a Bronze/Silver/Gold medallion model, dbt for transformations, Snowpark for ML features, governance with RBAC and masking, observability with alerts, and Infrastructure as Code using Terraform.
@@ -24,16 +41,16 @@ Key architectural decisions and tradeoffs are documented in `docs/technical_desi
 
 ## Key Features
 
-- Real-time ingestion with Snowpipe Streaming
-- Bronze / Silver / Gold medallion architecture
-- dbt incremental models and snapshots
-- Snowpark-based feature engineering
-- Governance with RBAC, masking and row access policies
-- CI/CD validation with GitHub Actions
-- Infrastructure as Code using Terraform
-- Dynamic Tables for low-latency analytics marts
-- Streams & Tasks for incremental processing
-- Observability and warehouse monitoring
+* Real-time ingestion with Snowpipe Streaming
+* Bronze / Silver / Gold medallion architecture
+* dbt incremental models and snapshots
+* Snowpark-based feature engineering
+* Governance with RBAC, masking and row access policies
+* CI/CD validation with GitHub Actions
+* Infrastructure as Code using Terraform
+* Dynamic Tables for low-latency analytics marts
+* Streams & Tasks for incremental processing
+* Observability and warehouse monitoring
 
 ## Repository Structure
 
@@ -86,34 +103,34 @@ dbt seed
 dbt snapshot   # SCD2 customer history
 dbt run
 dbt test
-dbt docs generate
+dbt parse --profiles-dir .
 ```
 
 ## CI/CD
 
 GitHub Actions validates:
 
-- SQLFluff linting
-- dbt dependency installation and compilation
-- pytest execution
-- Terraform formatting and validation
+* SQLFluff linting
+* dbt dependency installation and validation
+* pytest execution
+* Terraform formatting and validation
 
 ## Performance Considerations
 
-- Incremental dbt models reduce unnecessary full-table scans
-- Warehouses are isolated by workload (ingest / transform / analytics / ML)
-- Streams & Tasks minimize recomputation for CDC processing
-- Dynamic Tables are used selectively for low-latency marts
-- Raw tables retain full VARIANT payloads to simplify replay after schema evolution
-- Feature tables store `run_id` and `as_of_timestamp` for ML reproducibility
+* Incremental dbt models reduce unnecessary full-table scans
+* Warehouses are isolated by workload (ingest / transform / analytics / ML)
+* Streams & Tasks minimize recomputation for CDC processing
+* Dynamic Tables are used selectively for low-latency marts
+* Raw tables retain full VARIANT payloads to simplify replay after schema evolution
+* Feature tables store `run_id` and `as_of_timestamp` for ML reproducibility
 
 ## Governance & Security
 
-- Role-based access control (RBAC)
-- Column masking policies for PII
-- Row access policies for regional filtering
-- Environment isolation through Terraform-managed infrastructure
-- No credentials or secrets committed to source control
+* Role-based access control (RBAC)
+* Column masking policies for PII
+* Row access policies for regional filtering
+* Environment isolation through Terraform-managed infrastructure
+* No credentials or secrets committed to source control
 
 ## Credentials
 
