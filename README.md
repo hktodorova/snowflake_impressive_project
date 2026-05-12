@@ -2,6 +2,8 @@
 
 **Hristina Todorova** · [hktodorova@gmail.com](mailto:hktodorova@gmail.com)
 
+[View Project on GitHub](https://github.com/hktodorova/snowflake_impressive_project)
+
 ![Python](https://img.shields.io/badge/Python-3.11-blue)
 ![dbt](https://img.shields.io/badge/dbt-1.8-orange)
 ![Snowflake](https://img.shields.io/badge/Snowflake-Data%20Platform-blue)
@@ -12,11 +14,44 @@
 
 Production-style Snowflake analytics platform implementing real-time ingestion, analytics engineering, governance, observability and infrastructure automation on top of Snowflake.
 
-The project simulates a modern enterprise-grade e-commerce analytics platform with batch and streaming ingestion, medallion architecture, data quality validation, security governance and business-facing analytics marts.
+The project simulates a modern enterprise-grade e-commerce analytics platform with batch and streaming ingestion, medallion architecture, data quality validation, orchestration, security governance and business-facing analytics marts.
 
 ---
 
-# Quick Recruiter Summary
+# Table of Contents
+
+- [Recruiter Overview](#recruiter-overview)
+- [Tech Stack](#tech-stack)
+- [Project Overview](#project-overview)
+- [Business Impact](#business-impact)
+- [Architecture](#architecture)
+- [dbt Lineage](#dbt-lineage)
+- [Apache Airflow Orchestration](#apache-airflow-orchestration)
+- [Architectural Decisions](#architectural-decisions)
+- [Data Quality Strategy](#data-quality-strategy)
+- [Scalability Considerations](#scalability-considerations)
+- [Repository Structure](#repository-structure)
+- [Running Locally](#running-locally)
+- [Running on Snowflake](#running-on-snowflake)
+- [CI/CD](#cicd)
+- [Performance Considerations](#performance-considerations)
+- [Governance & Security](#governance--security)
+
+---
+
+# Platform Overview
+
+## Architecture
+
+![Architecture](docs/snowflake_architecture_diagram.png)
+
+## dbt Lineage
+
+![dbt Lineage](docs/dbt_lineage.png)
+
+---
+
+# Recruiter Overview
 
 This repository demonstrates hands-on experience with:
 
@@ -25,6 +60,7 @@ This repository demonstrates hands-on experience with:
 * Snowflake Streams, Tasks and Dynamic Tables
 * Snowpipe Streaming ingestion
 * Snowpark Python feature engineering
+* Apache Airflow orchestration
 * Terraform Infrastructure as Code
 * GitHub Actions CI/CD workflows
 * RBAC, masking and row-level governance
@@ -46,6 +82,7 @@ This repository demonstrates hands-on experience with:
 | Data Warehouse | Snowflake |
 | Transformations | dbt |
 | Programming | Python |
+| Orchestration | Apache Airflow |
 | Streaming | Kafka / Snowpipe Streaming |
 | Infrastructure | Terraform |
 | CI/CD | GitHub Actions |
@@ -60,7 +97,7 @@ This repository demonstrates hands-on experience with:
 
 This is a production-oriented Snowflake data platform built for a simulated real-time e-commerce environment.
 
-The implementation demonstrates how modern cloud-native analytics platforms can be designed end-to-end using scalable ingestion patterns, modular transformations, governance, observability and infrastructure automation.
+The implementation demonstrates how modern cloud-native analytics platforms can be designed end-to-end using scalable ingestion patterns, modular transformations, orchestration, governance, observability and infrastructure automation.
 
 The project intentionally prioritizes realistic enterprise architecture patterns over simplified tutorial-style examples.
 
@@ -71,6 +108,7 @@ The project intentionally prioritizes realistic enterprise architecture patterns
 * Incremental ELT processing
 * Analytics-ready Gold marts
 * Data quality monitoring
+* Apache Airflow orchestration
 * Role-based governance
 * Infrastructure as Code
 * CI/CD automation
@@ -107,14 +145,13 @@ This platform simulates real-world enterprise analytics scenarios commonly found
 
 # Architecture
 
-![Architecture](docs/snowflake_architecture_diagram.png)
-
 ### Core Architecture Components
 
 * Snowpipe Streaming for near real-time ingestion
 * Bronze / Silver / Gold medallion architecture
 * dbt-based transformation layer
 * Snowpark Python feature engineering
+* Apache Airflow orchestration
 * Terraform-managed infrastructure
 * Governance and security policies
 * Observability and warehouse monitoring
@@ -126,13 +163,41 @@ This platform simulates real-world enterprise analytics scenarios commonly found
 
 The project uses dbt lineage tracking to provide transparent dependency management and end-to-end visibility across ingestion, transformations, analytics marts and ML feature generation.
 
-The lineage graph below demonstrates the complete flow from raw ingestion to business-ready Gold marts and downstream analytics exposures.
-
-![dbt Lineage](docs/dbt_lineage.png)
+The lineage graph demonstrates the complete flow from raw ingestion to business-ready Gold marts and downstream analytics exposures.
 
 ---
 
-# Why These Design Decisions
+# Apache Airflow Orchestration
+
+The platform includes a sample Apache Airflow DAG orchestrating the end-to-end data engineering workflow.
+
+### Pipeline Flow
+
+```text
+generate_sample_data
+    ↓
+load_raw_data_to_snowflake
+    ↓
+run_dbt_models
+    ↓
+run_dbt_tests
+    ↓
+validate_data_quality
+    ↓
+publish_gold_marts
+```
+
+The DAG demonstrates orchestration of ingestion, transformations, testing, data quality validation and analytics publishing in a production-style workflow.
+
+### DAG Location
+
+```text
+airflow/dags/ecommerce_snowflake_pipeline.py
+```
+
+---
+
+# Architectural Decisions
 
 ## Medallion Architecture (Bronze / Silver / Gold)
 
@@ -181,6 +246,20 @@ Snowpipe Streaming enables continuous ingestion of clickstream and CDC-style eve
 * Near real-time ingestion
 * Scalable event processing
 * Reduced manual ingestion management
+
+---
+
+## Apache Airflow Orchestration
+
+Apache Airflow was introduced to orchestrate ingestion, transformation and data quality workflows.
+
+### Benefits
+
+* Workflow dependency management
+* Pipeline scheduling and orchestration
+* Operational visibility
+* Easier pipeline monitoring
+* Scalable workflow automation
 
 ---
 
@@ -260,14 +339,15 @@ These tradeoffs reflect realistic engineering decision-making in modern cloud da
 # Repository Structure
 
 ```text
-sql/          → setup, ingestion, transformations, governance, observability
-dbt/          → Bronze views, Silver incremental models, Gold marts
-snowpark/     → Snowpark Python jobs for feature engineering and data quality
-terraform/    → infrastructure as code (warehouses, roles, schemas)
-kafka/        → Snowpipe Streaming examples for CDC and clickstream ingestion
-docs/         → architecture diagrams and technical design decisions
-scripts/      → local sample data generation
-tests/        → smoke tests and validation
+airflow/     → orchestration DAGs and workflow automation
+sql/         → setup, ingestion, transformations, governance, observability
+dbt/         → Bronze views, Silver incremental models, Gold marts
+snowpark/    → Snowpark Python jobs for feature engineering and data quality
+terraform/   → infrastructure as code (warehouses, roles, schemas)
+kafka/       → Snowpipe Streaming examples for CDC and clickstream ingestion
+docs/        → architecture diagrams and technical design decisions
+scripts/     → local sample data generation
+tests/       → smoke tests and validation
 ```
 
 ---
@@ -365,6 +445,7 @@ This project deepened my understanding of:
 * Snowflake governance patterns
 * analytics engineering workflows
 * dbt-based transformation development
+* orchestration using Apache Airflow
 * infrastructure-as-code for data platforms
 * balancing scalability, simplicity and maintainability
 * incremental processing strategies
@@ -376,7 +457,6 @@ This project deepened my understanding of:
 
 Potential next enhancements:
 
-* Apache Airflow orchestration
 * dbt semantic layer
 * Great Expectations integration
 * Iceberg external tables
