@@ -10,66 +10,273 @@
 
 ---
 
-Production-style Snowflake analytics platform implementing real-time ingestion, medallion architecture, analytics engineering, governance, observability and infrastructure automation.
+Production-style Snowflake analytics platform implementing real-time ingestion, analytics engineering, governance, observability and infrastructure automation on top of Snowflake.
 
-## Quick Recruiter Summary
-
-This project demonstrates practical Snowflake Data Engineering skills:
-
-* SQL-based ELT pipelines
-* Snowflake Streams, Tasks and Dynamic Tables
-* dbt models, tests and snapshots
-* Snowpark Python for data quality and feature engineering
-* Terraform Infrastructure as Code
-* GitHub Actions CI/CD
-* Governance with RBAC, masking and row access policies
-* Kafka / Snowpipe Streaming ingestion example
-
-Best fit: Snowflake Data Engineer, Analytics Engineer, Data Platform Engineer.
+The project simulates a modern enterprise-grade e-commerce analytics platform with batch and streaming ingestion, medallion architecture, data quality validation, security governance and business-facing analytics marts.
 
 ---
 
-This is my personal portfolio project — a full data platform built on Snowflake for an e-commerce use case. I built it to demonstrate how I would approach a production-style setup end-to-end, not just the transformation layer.
+# Quick Recruiter Summary
 
-The implementation intentionally prioritizes production-oriented patterns over minimal examples. The stack includes ingestion (batch + streaming), a Bronze/Silver/Gold medallion model, dbt for transformations, Snowpark for ML features, governance with RBAC and masking, observability with alerts, and Infrastructure as Code using Terraform.
+This repository demonstrates hands-on experience with:
 
-Key architectural decisions and tradeoffs are documented in `docs/technical_design.md`.
+* Snowflake ELT pipelines
+* dbt transformations, tests and lineage
+* Snowflake Streams, Tasks and Dynamic Tables
+* Snowpipe Streaming ingestion
+* Snowpark Python feature engineering
+* Terraform Infrastructure as Code
+* GitHub Actions CI/CD workflows
+* RBAC, masking and row-level governance
+* Analytics Engineering and Gold-layer marts
 
-## Architecture
+### Target Roles
+
+* Snowflake Data Engineer
+* Analytics Engineer
+* Data Platform Engineer
+* Cloud Data Engineer
+
+---
+
+# Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Data Warehouse | Snowflake |
+| Transformations | dbt |
+| Programming | Python |
+| Streaming | Kafka / Snowpipe Streaming |
+| Infrastructure | Terraform |
+| CI/CD | GitHub Actions |
+| Data Quality | dbt tests + Snowpark |
+| Security | RBAC + Masking Policies |
+| Monitoring | Snowflake Monitoring Views |
+| Data Modeling | Bronze / Silver / Gold Medallion Architecture |
+
+---
+
+# Project Overview
+
+This is a production-oriented Snowflake data platform built for a simulated real-time e-commerce environment.
+
+The implementation demonstrates how modern cloud-native analytics platforms can be designed end-to-end using scalable ingestion patterns, modular transformations, governance, observability and infrastructure automation.
+
+The project intentionally prioritizes realistic enterprise architecture patterns over simplified tutorial-style examples.
+
+### Core Platform Capabilities
+
+* Batch and streaming ingestion
+* Bronze / Silver / Gold medallion architecture
+* Incremental ELT processing
+* Analytics-ready Gold marts
+* Data quality monitoring
+* Role-based governance
+* Infrastructure as Code
+* CI/CD automation
+* ML feature engineering workflows
+
+---
+
+# Business Impact
+
+This platform simulates real-world enterprise analytics scenarios commonly found in modern digital commerce organizations.
+
+### Business Use Cases
+
+* Customer 360 analytics
+* Revenue and sales reporting
+* Product performance analysis
+* Fraud signal generation
+* Operational KPI dashboards
+* Historical trend analysis
+* Real-time clickstream analytics
+* Customer segmentation and behavioral analysis
+
+### Business Benefits
+
+* Centralized and governed analytics platform
+* Faster and more reliable reporting
+* Reduced manual data processing
+* Improved data consistency across teams
+* Scalable architecture for future growth
+* Secure access control and sensitive data protection
+* Reduced operational overhead through automation
+
+---
+
+# Architecture
 
 ![Architecture](docs/snowflake_architecture_diagram.png)
 
-## Key Features
+### Core Architecture Components
 
-* Real-time ingestion with Snowpipe Streaming
+* Snowpipe Streaming for near real-time ingestion
 * Bronze / Silver / Gold medallion architecture
-* dbt incremental models and snapshots
-* Snowpark-based feature engineering
-* Governance with RBAC, masking and row access policies
-* CI/CD validation with GitHub Actions
-* Infrastructure as Code using Terraform
-* Dynamic Tables for low-latency analytics marts
-* Streams & Tasks for incremental processing
+* dbt-based transformation layer
+* Snowpark Python feature engineering
+* Terraform-managed infrastructure
+* Governance and security policies
 * Observability and warehouse monitoring
+* Incremental processing using Streams & Tasks
 
-## Repository Structure
+---
+
+# dbt Lineage
+
+The project uses dbt lineage tracking to provide transparent dependency management and end-to-end visibility across ingestion, transformations, analytics marts and ML feature generation.
+
+The lineage graph below demonstrates the complete flow from raw ingestion to business-ready Gold marts and downstream analytics exposures.
+
+![dbt Lineage](docs/dbt_lineage.png)
+
+---
+
+# Why These Design Decisions
+
+## Medallion Architecture (Bronze / Silver / Gold)
+
+The medallion architecture was selected to separate raw ingestion, standardized transformations and business-ready analytics layers.
+
+### Benefits
+
+* Improved maintainability
+* Better data quality management
+* Easier debugging and lineage tracking
+* Clear separation of concerns
+
+---
+
+## dbt for Transformations
+
+dbt was used to implement modular SQL transformations, testing, lineage tracking and reusable analytics logic.
+
+### Benefits
+
+* Version-controlled transformations
+* Built-in testing and documentation
+* Modular analytics engineering workflows
+* Faster development cycles
+
+---
+
+## Snowflake Dynamic Tables
+
+Dynamic Tables were selected to simplify incremental processing and reduce orchestration complexity.
+
+### Benefits
+
+* Automated refresh management
+* Reduced operational overhead
+* Simplified low-latency analytics pipelines
+
+---
+
+## Snowpipe Streaming
+
+Snowpipe Streaming enables continuous ingestion of clickstream and CDC-style events.
+
+### Benefits
+
+* Near real-time ingestion
+* Scalable event processing
+* Reduced manual ingestion management
+
+---
+
+## Terraform Infrastructure as Code
+
+Terraform was used to provision Snowflake infrastructure consistently across environments.
+
+### Benefits
+
+* Reproducible infrastructure
+* Environment consistency
+* CI/CD integration readiness
+* Easier operational management
+
+---
+
+## Governance & Security
+
+RBAC, masking policies and row-level security were implemented to simulate enterprise governance requirements.
+
+### Benefits
+
+* Secure access control
+* Protection of sensitive information
+* Compliance-oriented architecture
+* Fine-grained data governance
+
+---
+
+# Data Quality Strategy
+
+The platform implements multiple layers of data quality validation.
+
+### Data Quality Features
+
+* dbt schema and relationship tests
+* Snowpark validation checks
+* Freshness validation for ingestion pipelines
+* Duplicate detection
+* Null and anomaly monitoring
+* CI/CD validation in GitHub Actions
+
+This simulates production-grade data reliability practices commonly used in enterprise analytics platforms.
+
+---
+
+# Scalability Considerations
+
+The architecture was designed with scalability and operational simplicity in mind.
+
+### Scalability Patterns
+
+* Workload-isolated Snowflake warehouses
+* Incremental processing using Streams & Tasks
+* Modular dbt model structure
+* Decoupled ingestion and transformation layers
+* Infrastructure automation with Terraform
+* Low-latency analytics using Dynamic Tables
+
+---
+
+# Architectural Tradeoffs
+
+Several implementation decisions intentionally prioritize simplicity, maintainability and readability over maximum optimization.
+
+### Examples
+
+* Dynamic Tables were selected to reduce orchestration complexity
+* Snowpark jobs remain lightweight to minimize compute costs
+* The project uses a simplified CDC simulation instead of a fully distributed Kafka setup
+* The architecture favors modularity and observability over minimal infrastructure footprint
+
+These tradeoffs reflect realistic engineering decision-making in modern cloud data platforms.
+
+---
+
+# Repository Structure
 
 ```text
-sql/          → setup, ingestion, transformations, governance, observability (run in order)
-dbt/          → Bronze views, Silver incremental models, Gold marts, feature engineering
-snowpark/     → Snowpark Python jobs for feature computation and data quality
+sql/          → setup, ingestion, transformations, governance, observability
+dbt/          → Bronze views, Silver incremental models, Gold marts
+snowpark/     → Snowpark Python jobs for feature engineering and data quality
 terraform/    → infrastructure as code (warehouses, roles, schemas)
-kafka/        → Snowpipe Streaming example for CDC and clickstream ingestion
-docs/         → architecture diagram and technical design decisions
-scripts/      → local data generator so the project can run without live upstream systems
-tests/        → smoke test validating repository structure and local execution
+kafka/        → Snowpipe Streaming examples for CDC and clickstream ingestion
+docs/         → architecture diagrams and technical design decisions
+scripts/      → local sample data generation
+tests/        → smoke tests and validation
 ```
 
-## Running Locally
+---
+
+# Running Locally
 
 ```bash
 python -m venv .venv
-.venv\Scripts\activate          # on Windows
+.venv\Scripts\activate
 
 pip install -r requirements.txt
 
@@ -78,9 +285,11 @@ python snowpark/data_quality_local_demo.py
 python tests/smoke_test_project.py
 ```
 
-## Running on Snowflake
+---
 
-Execute the SQL files in the following order:
+# Running on Snowflake
+
+Execute SQL scripts in the following order:
 
 ```text
 sql/00_setup/01_roles_warehouses_databases.sql
@@ -100,13 +309,15 @@ cd dbt
 
 dbt deps
 dbt seed
-dbt snapshot   # SCD2 customer history
+dbt snapshot
 dbt run
 dbt test
-dbt parse --profiles-dir .
+dbt parse
 ```
 
-## CI/CD
+---
+
+# CI/CD
 
 GitHub Actions validates:
 
@@ -115,25 +326,62 @@ GitHub Actions validates:
 * pytest execution
 * Terraform formatting and validation
 
-## Performance Considerations
+---
 
-* Incremental dbt models reduce unnecessary full-table scans
+# Performance Considerations
+
+* Incremental dbt models minimize unnecessary full-table scans
 * Warehouses are isolated by workload (ingest / transform / analytics / ML)
-* Streams & Tasks minimize recomputation for CDC processing
+* Streams & Tasks reduce recomputation overhead
 * Dynamic Tables are used selectively for low-latency marts
-* Raw tables retain full VARIANT payloads to simplify replay after schema evolution
-* Feature tables store `run_id` and `as_of_timestamp` for ML reproducibility
+* Raw tables retain full VARIANT payloads for replay and schema evolution
+* Feature tables include `run_id` and `as_of_timestamp` for ML reproducibility
 
-## Governance & Security
+---
+
+# Governance & Security
 
 * Role-based access control (RBAC)
 * Column masking policies for PII
 * Row access policies for regional filtering
-* Environment isolation through Terraform-managed infrastructure
-* No credentials or secrets committed to source control
+* Terraform-managed environment isolation
+* No secrets or credentials committed to source control
 
-## Credentials
+---
+
+# Credentials
 
 No credentials, secrets or environment-specific configuration are committed to this repository.
 
-Use environment variables or a secret manager of your choice for Snowflake connectivity.
+Use environment variables or a secure secret-management solution for Snowflake connectivity.
+
+---
+
+# Key Learnings
+
+This project deepened my understanding of:
+
+* modern ELT architectures
+* Snowflake governance patterns
+* analytics engineering workflows
+* dbt-based transformation development
+* infrastructure-as-code for data platforms
+* balancing scalability, simplicity and maintainability
+* incremental processing strategies
+* production-style data platform design
+
+---
+
+# Future Improvements
+
+Potential next enhancements:
+
+* Apache Airflow orchestration
+* dbt semantic layer
+* Great Expectations integration
+* Iceberg external tables
+* Cost optimization dashboards
+* ML feature store integration
+* Real-time alerting pipelines
+* Multi-environment deployment automation
+* End-to-end observability dashboards
